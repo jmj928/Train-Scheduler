@@ -1,3 +1,4 @@
+$(document).ready(function() {
   // Initialize Firebase
   var config = {
     apiKey: "AIzaSyA0dyyV-BSfT76o6FOkCfM2UUyTptFoL64",
@@ -17,6 +18,7 @@ firebase.initializeApp(config);
     var destination = "";
     var startDate = "";
     var rate = "";
+    
     
 
   // Capture Button Click
@@ -39,6 +41,12 @@ firebase.initializeApp(config);
     console.log(startDate);
     console.log(rate);
 
+    if(name === "" || destination === "" || startDate === "" || rate === "" )
+    {
+        alert("Please fill out all fields to add this train");
+    }
+    else{
+
      // Change what is saved in firebase
      database.ref().push({
       name: name,
@@ -47,7 +55,21 @@ firebase.initializeApp(config);
       rate: rate,
       dateAdded: firebase.database.ServerValue.TIMESTAMP
     });
+    }
   });
+
+        // Delete Button Click
+    $(".deleteButton").on("click", function(event) {
+        // Don't refresh the page!
+        event.preventDefault();
+
+       // var pressedButton = $(this).val('id');
+        console.log("Pressed button ");
+
+       // nameRef.child(pressedButton).remove();
+        
+
+    });
 
       // Firebase watcher .on("child_added"
       database.ref().orderByChild("startDate").on("child_added", function(snapshot) {
@@ -58,6 +80,7 @@ firebase.initializeApp(config);
         var td3 = $("<td>").html('');
         var td4 = $("<td>").html('');
         var td5 = $("<td>").html('');
+        var td6 = $("<td>").html('');
         // storing the snapshot.val() in a variable for convenience
         var sv = snapshot.val();
   
@@ -66,6 +89,10 @@ firebase.initializeApp(config);
         console.log(sv.destination);
         console.log(sv.startDate);
         console.log(sv.rate);
+
+        var removeButton = $("<button>");
+        removeButton.addClass("btn btn-default btn-primary deleteButton");
+        removeButton.text("Remove Train");
 
         // First Time (pushed back 1 year to make sure it comes before current time)
         var timeConverted = moment(sv.startDate, "HH:mm").subtract(1, "years");
@@ -93,12 +120,15 @@ firebase.initializeApp(config);
         var nextTrainDisplay = moment(nextTrain).format("hh:mm A");
     
         // Change the HTML to reflect
-      
+
+         removeButton.attr("id",sv.name);
+
          td1 = $("<td>").html(sv.name);
          td2 = $("<td>").html(sv.destination);
          td3 = $("<td>").html(sv.rate);
          td4 = $("<td>").html(nextTrainDisplay);
          td5 = $("<td>").html(tMinutesTillTrain);
+        
         newRow.append(td1,td2,td3,td4,td5);
         $("tbody").append(newRow);
   
@@ -106,3 +136,4 @@ firebase.initializeApp(config);
       }, function(errorObject) {
         console.log("Errors handled: " + errorObject.code);
       });
+    });
