@@ -90,7 +90,7 @@ firebase.initializeApp(config);
         // Next Train
         var nextTrain = moment().add(tMinutesTillTrain, "minutes");
         console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
-        var nextTrainDisplay = moment(nextTrain).format("hh:mm");
+        var nextTrainDisplay = moment(nextTrain).format("hh:mm A");
     
         // Change the HTML to reflect
       
