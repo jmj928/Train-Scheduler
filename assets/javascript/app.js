@@ -103,7 +103,7 @@ firebase.initializeApp(config);
 
         var removeButton = $("<button>");
         removeButton.addClass("btn btn-default btn-primary deleteButton");
-        removeButton.text("Remove Train");
+        removeButton.text("Delete");
 
         // First Time (pushed back 1 year to make sure it comes before current time)
         var timeConverted = moment(sv.startDate, "HH:mm").subtract(1, "years");
