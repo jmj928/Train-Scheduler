@@ -18,6 +18,7 @@ firebase.initializeApp(config);
     var destination = "";
     var startDate = "";
     var rate = "";
+    var pressedButton ="";
     
     
 
@@ -59,19 +60,29 @@ firebase.initializeApp(config);
   });
 
         // Delete Button Click
-    $(".deleteButton").on("click", function(event) {
+    $("body").on("click", ".deleteButton", function() {
         // Don't refresh the page!
         event.preventDefault();
+        //remove from table
+        $(this).closest ('tr').remove();
+        //remove from firebase
+        pressedButton = $(this).attr("id");
 
-       // var pressedButton = $(this).val('id');
-        console.log("Pressed button ");
+        //var removeEntry = database.ref().child("name").equalTo(pressedButton);
+        console.log("Pressed button " + database.ref().orderByChild("name"));
+        //console.log("DB ref name " + database.parent().ref(pressedButton))
+       // removeEntry.remove();
 
-       // nameRef.child(pressedButton).remove();
+       database.ref().orderByChild("name").equalTo(pressedButton).on("child_added",function(snapshot){
+
+        console.log(snapshot.val());
+        snapshot.ref.remove();
+       })
         
 
     });
 
-      // Firebase watcher .on("child_added"
+      // Firebase watcher .on("child_added"et
       database.ref().orderByChild("startDate").on("child_added", function(snapshot) {
 
         var newRow = $("<tr>");
@@ -129,7 +140,7 @@ firebase.initializeApp(config);
          td4 = $("<td>").html(nextTrainDisplay);
          td5 = $("<td>").html(tMinutesTillTrain);
         
-        newRow.append(td1,td2,td3,td4,td5);
+        newRow.append(td1,td2,td3,td4,td5,removeButton);
         $("tbody").append(newRow);
   
         // Handle the errors
